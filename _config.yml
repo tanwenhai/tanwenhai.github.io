@@ -76,3 +76,4 @@ archive_generator:
 deploy:
   type: git
   repo: https://github.com/tanwenhai/tanwenhai.github.io.git
+  branch: master
