@@ -2,6 +2,7 @@
 title: 使用dblib连接sybase
 date: 2017-02-14 15:17:14
 tags: php
+summary: php使用pdo连接sybase数据库
 ---
 1. 安装freetds
 ```bash
