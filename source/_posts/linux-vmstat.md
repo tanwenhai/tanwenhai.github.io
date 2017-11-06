@@ -28,4 +28,5 @@ procs -----------memory---------- ---swap-- -----io---- -system-- ----cpu----
 * **us** 用户CPU时间(用户态)
 * **sy** 系统CPU时间(系统态)
 * **id** CPU空闲时间 一般来说，id + us + sy = 100
-* **wt** 等待IO CPU时间。
+* **wa** 等待IO CPU时间。
+* **st** 未知
