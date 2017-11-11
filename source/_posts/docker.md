@@ -31,6 +31,10 @@ docker export 容器ID > java.tar.gz
 ```
 
 # 镜像
+### 查找镜像
+```bash
+docker search mysql -s 100
+```
 ### 拉取镜像
 ```bash
 docker pull mysql
@@ -47,4 +51,17 @@ docker save -o java.tar.gz twh/java
 ### 导入镜像
 ```bash
 cat java.tar.gz|docker import - twh/java:v1.0.1
+```
+# docker 私有仓库搭建
+1. 获取registry镜像
+```bash
+docker pull registry
+```
+2. 运行镜像 -p端口映射 -v数据卷
+```bash
+docker run -d -p 5000:5000 -v /data/docker/registry:/tmp/registry registry
+```
+3. 上传镜像
+```bash
+docker push 192.168.3.3:5000/java
 ```
