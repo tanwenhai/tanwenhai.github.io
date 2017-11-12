@@ -63,13 +63,43 @@ pagination_dir: page
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-theme: anatole
+theme: archer
 
 archive_generator:
   per_page: 0
   yearly: false
   monthly: false
   daily: false
+
+jsonContent:
+  meta: true
+  pages: true
+  posts:
+    title: true
+    date: true
+    path: true
+    text: true
+    raw: false
+    content: true
+    slug: false
+    updated: false
+    comments: false
+    link: false
+    permalink: false
+    excerpt: false
+    categories: false
+    tags: true
+    
+marked:
+  gfm: true
+  pedantic: false
+  sanitize: false
+  tables: true
+  breaks: true
+  smartLists: true
+  smartypants: true
+  modifyAnchors: ''
+  autolink: true
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html

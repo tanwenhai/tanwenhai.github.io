@@ -1,7 +1,7 @@
 ---
 title: jinfo:JAVA进程运行时修改虚拟机参数利器（无需重启）
 date: 2017-11-11 17:00:50
-tags:
+tags: linux jinfo
 ---
 > 转 http://www.open-open.com/lib/view/open1437018491912.html
 
