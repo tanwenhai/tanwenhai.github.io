@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" >
     <title>
         
-        jinfo:JAVA进程运行时修改虚拟机参数利器（无需重启） · xixi
+        about · xixi
         
     </title>
     <link rel="icon" href= /assests/favicon.ico>
@@ -50,22 +50,11 @@
     
 </head>
     
-        <body class="post-body">
-    
     
 <header class="header">
 
     <div class="header-sidebar-menu">&#xe775;</div>
     <!-- post页的toggle banner  -->
-    
-    <div class="banner">
-            <div class="blog-title">
-                <a href="/" >xixi</a>
-            </div>
-            <div class="post-title">
-                <a href="#" class="post-name">jinfo:JAVA进程运行时修改虚拟机参数利器（无需重启）</a>
-            </div>
-    </div>
     
     <a class="home-link" href=/>xixi</a>
 </header>
@@ -73,43 +62,21 @@
         <div class="site-intro">
     
     <!-- 主页  -->
-    
-    
-    <!-- 404页  -->
             
-    <div class="site-intro-img" style="background-image: url(http://oumn0o088.bkt.clouddn.com/post-bg.jpg)"></div>
+    <div class="site-intro-img" style="background-image: url(/)"></div>
     <div class="site-intro-placeholder"></div>
     <div class="site-intro-meta">
         <!-- 标题  -->
         <h1 class="intro-title">
             <!-- 主页  -->
             
-            jinfo:JAVA进程运行时修改虚拟机参数利器（无需重启）
-            <!-- 404 -->
-            
         </h1>
         <!-- 副标题 -->
         <p class="intro-subtitle">
             <!-- 主页副标题  -->
             
-            
-            <!-- 404 -->
-            
         </p>
         <!-- 文章页meta -->
-        
-            <!-- 文章页标签  -->
-            
-                <div class= post-intro-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-href = linux jinfo>linux jinfo</a>
-    
-</div>
-            
-            <div class="post-intro-meta">
-                <span class="post-intro-calander iconfont-archer">&#xe676;</span>
-                <span class="post-intro-time">2017/11/11</span>
-            </div>
         
     </div>
 </div>
@@ -179,31 +146,12 @@
         <div class="container container-unloaded">
             <main class="main post-page">
     <article class="article-entry">
-        <blockquote>
-<p>转 <a href="http://www.open-open.com/lib/view/open1437018491912.html" target="_blank" rel="external">http://www.open-open.com/lib/view/open1437018491912.html</a></p>
-</blockquote>
-<p>虚拟机总会有出现问题的时候，并且你深深的知道如果通过配置一些参数使得虚拟机打印一些运行时信息，可以通过这种途径改善虚拟机的运行状况。如 XX:+HeapDumpOnOutOfMemoryError和XX:+PrintGCDetails。但是有时候这些参数会丢失，这是件令人头痛的事情。<br>因此，你痛苦的耸了耸肩，杀掉虚拟机进程，修改启动参数并祈祷之前的糟糕状况可以在重新启动之后重现。现在你拥有足够的证据来查找问题的根源，并改正。前面描述的方式，很显然需要一次额外的重启并添加一些调试参数。实际上，不需要重启虚拟机的方法是有的，这种方法好处是大大的。<br>JDK打包工具里面为我们提供了一个很好的小工具。jinfo是一个命令行工具，通过这个工具可以获取JAVA进程运行时的一些信息，通过使用jinfo 和一些参数，可以动态修改JAVA进程的虚拟机参数，这些参数并不是万能的，但是在一些场景中是非常有用的。虚拟机的这些参数可以通过下面的命令查看：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">$ java -XX:+PrintFlagsFinal -version| grep manageable</div><div class="line">     intx CMSAbortablePrecleanWaitMillis            = 100                                 &#123;manageable&#125;</div><div class="line">     intx CMSTriggerInterval                        = -1                                  &#123;manageable&#125;</div><div class="line">     intx CMSWaitDuration                           = 2000                                &#123;manageable&#125;</div><div class="line">     bool HeapDumpAfterFullGC                       = <span class="literal">false</span>                               &#123;manageable&#125;</div><div class="line">     bool HeapDumpBeforeFullGC                      = <span class="literal">false</span>                               &#123;manageable&#125;</div><div class="line">     bool HeapDumpOnOutOfMemoryError                = <span class="literal">false</span>                               &#123;manageable&#125;</div><div class="line">    ccstr HeapDumpPath                              =                                     &#123;manageable&#125;</div><div class="line">    uintx MaxHeapFreeRatio                          = 100                                 &#123;manageable&#125;</div><div class="line">    uintx MinHeapFreeRatio                          = 0                                   &#123;manageable&#125;</div><div class="line">     bool PrintClassHistogram                       = <span class="literal">false</span>                               &#123;manageable&#125;</div><div class="line">     bool PrintClassHistogramAfterFullGC            = <span class="literal">false</span>                               &#123;manageable&#125;</div><div class="line">     bool PrintClassHistogramBeforeFullGC           = <span class="literal">false</span>                               &#123;manageable&#125;</div><div class="line">     bool PrintConcurrentLocks                      = <span class="literal">false</span>                               &#123;manageable&#125;</div><div class="line">     bool PrintGC                                   = <span class="literal">false</span>                               &#123;manageable&#125;</div><div class="line">     bool PrintGCDateStamps                         = <span class="literal">false</span>                               &#123;manageable&#125;</div><div class="line">     bool PrintGCDetails                            = <span class="literal">false</span>                               &#123;manageable&#125;</div><div class="line">     bool PrintGCID                                 = <span class="literal">false</span>                               &#123;manageable&#125;</div><div class="line">     bool PrintGCTimeStamps                         = <span class="literal">false</span>                               &#123;manageable&#125;</div><div class="line">java version <span class="string">"1.8.0_112"</span></div><div class="line">Java(TM) SE Runtime Environment (build 1.8.0_112-b15)</div><div class="line">Java HotSpot(TM) 64-Bit Server VM (build 25.112-b15, mixed mode)</div></pre></td></tr></table></figure></p>
-<p>我们通过-XX:+PrintFlagsFinal -version参数可以获取JVM的所有选项，然而manageable才是我们所感兴趣的，通过JDK的管理接口（com.sun.management.HotSpotDiagnosticMCBean API）可以动态写入。非常相似的MBean也可以通过Jconsole查看，对于我来说命令行的方式是非常方便的。<br>下面是一个使用jinfo的例子：<br>我们通过动态打开JVM的GC日志开关例子来演示jinfo如何使用。<br>我们先通过jps来查看当前运行状态的虚拟机进程：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ jps -l</div><div class="line">31907 app.jar</div><div class="line">5574 sun.tools.jps.Jps</div></pre></td></tr></table></figure></p>
-<p>我们通过使用jinfo来打开虚拟机GC日志打印参数，-XX:+PrintGC和-XX:+PrintGCDetails。使用命令行方式微小的差别在于需要为jinfo同时指定-XX:+PrintGC和-XX:+PrintGCDetails参数。除了通过启动脚本可以设置参数，PrintGC默认是打开的，因此我们只需要打开PrintGCDetails参数。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ jinfo -flag +PrintGCDDetails 31907</div><div class="line">$ jinfo -flag +PrintGC 31907</div></pre></td></tr></table></figure></p>
+        <p>xixi</p>
 
     </article>
     <!-- 前后页  -->
     <ul class="post-pager">
         
-            <li class="next">
-                <a href= "/2017/11/11/docker/" title= docker >
-                    <span>Next Post</span>
-                    <span>docker</span>
-                </a>
-            </li>
-        
-        
-            <li class="previous">
-                <a href= "/2017/11/06/微服务和单体应用对比/" title= 微服务和单体应用对比 >
-                    <span>Previous Post</span>
-                    <span>微服务和单体应用对比</span>
-                </a>
-            </li>
         
     </ul>
     <!-- 评论插件 -->
@@ -260,13 +208,6 @@
 </footer>
     </div>
     <!-- toc -->
-    
-    <div class="toc-wrapper">
-        <div class="toc-catalog">
-            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
-        </div>
-        
-    </div>
     
     <div class="back-top">&#xe639;</div>
     <div class="sidebar">
