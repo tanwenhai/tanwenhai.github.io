@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>linux iostat | hgg</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="简介 iostat主要用于监控系统设备的IO负载情况，iostat首次运行时显示自系统启动开始的各项统计信息，之后运行iostat将显示自上次运行该命令以后的统计信息。用户可以通过指定统计的次数和时间来获得所需的统计信息。   -d 显示设备（磁盘）使用状态 -k 指定iostat的部分输出结果以kB为单位，而不是以扇区数为单位 -c 显示更详细的io设备统计信息12345678910111213">
+<meta property="og:type" content="article">
+<meta property="og:title" content="linux iostat">
+<meta property="og:url" content="http://tanwenhai.github.com/2017/11/06/linux-iostat/index.html">
+<meta property="og:site_name" content="hgg">
+<meta property="og:description" content="简介 iostat主要用于监控系统设备的IO负载情况，iostat首次运行时显示自系统启动开始的各项统计信息，之后运行iostat将显示自上次运行该命令以后的统计信息。用户可以通过指定统计的次数和时间来获得所需的统计信息。   -d 显示设备（磁盘）使用状态 -k 指定iostat的部分输出结果以kB为单位，而不是以扇区数为单位 -c 显示更详细的io设备统计信息12345678910111213">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-11-06T13:38:09.296Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="linux iostat">
+<meta name="twitter:description" content="简介 iostat主要用于监控系统设备的IO负载情况，iostat首次运行时显示自系统启动开始的各项统计信息，之后运行iostat将显示自上次运行该命令以后的统计信息。用户可以通过指定统计的次数和时间来获得所需的统计信息。   -d 显示设备（磁盘）使用状态 -k 指定iostat的部分输出结果以kB为单位，而不是以扇区数为单位 -c 显示更详细的io设备统计信息12345678910111213">
+  
+    <link rel="alternate" href="/atom.xml" title="hgg" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">hgg</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://tanwenhai.github.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-linux-iostat" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/11/06/linux-iostat/" class="article-date">
+  <time datetime="2017-11-06T07:24:38.000Z" itemprop="datePublished">2017-11-06</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      linux iostat
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><blockquote>
+<p>iostat主要用于监控系统设备的IO负载情况，iostat首次运行时显示自系统启动开始的各项统计信息，之后运行iostat将显示自上次运行该命令以后的统计信息。用户可以通过指定统计的次数和时间来获得所需的统计信息。</p>
+</blockquote>
+<ol>
+<li><strong>-d</strong> 显示设备（磁盘）使用状态</li>
+<li><strong>-k</strong> 指定iostat的部分输出结果以kB为单位，而不是以扇区数为单位</li>
+<li><strong>-c</strong> 显示更详细的io设备统计信息<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">$ iostat -dkx 1 5</div><div class="line">Linux 2.6.32-696.1.1.el6.x86_64 (iZuf650me9vkz4vfzq4htwZ) 	11/06/2017 	_x86_64_	(4 CPU)</div><div class="line"></div><div class="line">Device:         rrqm/s   wrqm/s     r/s     w/s    rkB/s    wkB/s avgrq-sz avgqu-sz   await r_await w_await  svctm  %util</div><div class="line">vda               0.02    26.90    0.28    1.23    10.82   112.50   164.15     0.08   53.10    6.34   63.66   1.95   0.29</div><div class="line"></div><div class="line">Device:         rrqm/s   wrqm/s     r/s     w/s    rkB/s    wkB/s avgrq-sz avgqu-sz   await r_await w_await  svctm  %util</div><div class="line">vda               0.00     2.00    0.00    2.00     0.00    16.00    16.00     0.00    1.00    0.00    1.00   1.00   0.20</div><div class="line"></div><div class="line">Device:         rrqm/s   wrqm/s     r/s     w/s    rkB/s    wkB/s avgrq-sz avgqu-sz   await r_await w_await  svctm  %util</div><div class="line">vda               0.00     0.00    0.00    0.00     0.00     0.00     0.00     0.00    0.00    0.00    0.00   0.00   0.00</div><div class="line"></div><div class="line">Device:         rrqm/s   wrqm/s     r/s     w/s    rkB/s    wkB/s avgrq-sz avgqu-sz   await r_await w_await  svctm  %util</div><div class="line">vda               0.00     0.00    0.00    0.00     0.00     0.00     0.00     0.00    0.00    0.00    0.00   0.00   0.00</div><div class="line"></div><div class="line">Device:         rrqm/s   wrqm/s     r/s     w/s    rkB/s    wkB/s avgrq-sz avgqu-sz   await r_await w_await  svctm  %util</div><div class="line">vda               0.00     0.00    0.00    0.00     0.00     0.00     0.00     0.00    0.00    0.00    0.00   0.00   0.00</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<ul>
+<li><strong>rrqm/s</strong> 每秒对该设备的读请求被合并次数，文件系统会对读取同块(block)的请求进行合并</li>
+<li><strong>wrqm/s</strong> 每秒对该设备的写请求被合并次数</li>
+<li><strong>r/s</strong> 每秒完成的读取次数</li>
+<li><strong>w/s</strong> 每秒完成的写次数</li>
+<li><strong>rkB/s</strong> 每秒读数据量(kB为单位)</li>
+<li><strong>wkB/s</strong> 每秒写数据量(kB为单位)</li>
+<li><strong>avgrq-sz</strong> 平均每次IO操作的数据量(扇区数为单位)</li>
+<li><strong>avgqu-sz</strong> 平均等待处理的IO请求队列长度</li>
+<li><strong>await</strong> 平均每次IO请求等待时间(包括等待时间和处理时间，毫秒为单位)</li>
+<li><strong>r_await</strong> 平均每次IO请求读等待时间</li>
+<li><strong>w_await</strong> 平均每次IO请求写等待时间</li>
+<li><strong>svctm</strong> 平均每次IO请求的处理时间(毫秒为单位)</li>
+<li><strong>%util</strong> 采集周期内用于IO操作的时间比率，即IO队列非空的时间比率</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://tanwenhai.github.com/2017/11/06/linux-iostat/" data-id="cj9w6di960005souz8dpabuyc" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/11/06/微服务和单体应用对比/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          微服务和单体应用对比
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/11/06/linux-vmstat/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">linux vmstat</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring-Cloud-Ribbon/">Spring Cloud Ribbon</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nginx/">nginx</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/php/">php</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/soft/">soft</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Spring-Cloud-Ribbon/" style="font-size: 10px;">Spring Cloud Ribbon</a> <a href="/tags/nginx/" style="font-size: 10px;">nginx</a> <a href="/tags/php/" style="font-size: 20px;">php</a> <a href="/tags/soft/" style="font-size: 10px;">soft</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">十一月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/11/11/docker/">docker</a>
+          </li>
+        
+          <li>
+            <a href="/2017/11/11/jinfo/">jinfo:JAVA进程运行时修改虚拟机参数利器（无需重启）</a>
+          </li>
+        
+          <li>
+            <a href="/2017/11/06/微服务和单体应用对比/">微服务和单体应用对比</a>
+          </li>
+        
+          <li>
+            <a href="/2017/11/06/linux-iostat/">linux iostat</a>
+          </li>
+        
+          <li>
+            <a href="/2017/11/06/linux-vmstat/">linux vmstat</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 tanwenhai<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>

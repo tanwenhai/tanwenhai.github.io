@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>linux vmstat | hgg</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="vmstat命令是最常见的Linux/Unix监控工具，可以展现给定时间间隔的服务器的状态值,包括服务器的CPU使用率，内存使用，虚拟内存交换情况,IO读写情况。这个命令是我查看Linux/Unix最喜爱的命令，一个是Linux/Unix都支持，二是相比top，我可以看到整个机器的CPU,内存,IO的使用情况，而不是单单看到各个进程的CPU使用率和内存使用率(使用场景不一样)。  一般vmstat">
+<meta property="og:type" content="article">
+<meta property="og:title" content="linux vmstat">
+<meta property="og:url" content="http://tanwenhai.github.com/2017/11/06/linux-vmstat/index.html">
+<meta property="og:site_name" content="hgg">
+<meta property="og:description" content="vmstat命令是最常见的Linux/Unix监控工具，可以展现给定时间间隔的服务器的状态值,包括服务器的CPU使用率，内存使用，虚拟内存交换情况,IO读写情况。这个命令是我查看Linux/Unix最喜爱的命令，一个是Linux/Unix都支持，二是相比top，我可以看到整个机器的CPU,内存,IO的使用情况，而不是单单看到各个进程的CPU使用率和内存使用率(使用场景不一样)。  一般vmstat">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-11-06T13:38:09.296Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="linux vmstat">
+<meta name="twitter:description" content="vmstat命令是最常见的Linux/Unix监控工具，可以展现给定时间间隔的服务器的状态值,包括服务器的CPU使用率，内存使用，虚拟内存交换情况,IO读写情况。这个命令是我查看Linux/Unix最喜爱的命令，一个是Linux/Unix都支持，二是相比top，我可以看到整个机器的CPU,内存,IO的使用情况，而不是单单看到各个进程的CPU使用率和内存使用率(使用场景不一样)。  一般vmstat">
+  
+    <link rel="alternate" href="/atom.xml" title="hgg" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">hgg</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://tanwenhai.github.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-linux-vmstat" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/11/06/linux-vmstat/" class="article-date">
+  <time datetime="2017-11-06T06:44:23.000Z" itemprop="datePublished">2017-11-06</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      linux vmstat
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>vmstat命令是最常见的Linux/Unix监控工具，可以展现给定时间间隔的服务器的状态值,包括服务器的CPU使用率，内存使用，虚拟内存交换情况,IO读写情况。这个命令是我查看Linux/Unix最喜爱的命令，一个是Linux/Unix都支持，二是相比top，我可以看到整个机器的CPU,内存,IO的使用情况，而不是单单看到各个进程的CPU使用率和内存使用率(使用场景不一样)。</p>
+<blockquote>
+<p>一般vmstat工具的使用是通过两个数字参数来完成的，第一个参数是采样的时间间隔数，单位是秒，第二个参数是采样的次数，如:</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="meta">$</span><span class="bash"> vmstat 1 10</span></div><div class="line">procs -----------memory---------- ---swap-- -----io---- --system-- -----cpu-----</div><div class="line"> r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs us sy id wa st</div><div class="line"> 0  0      0 129616   6552 1734536    0    0     3    28    0    0  2  0 97  0  0</div><div class="line"> 0  0      0 129352   6552 1734636    0    0     0   172 1644 1196  4  1 96  0  0</div><div class="line"> 0  0      0 129352   6552 1734668    0    0     0     0 1338 1164  3  1 97  0  0</div><div class="line"> 1  0      0 129632   6552 1734932    0    0     0     0 2695 2396 14  1 85  0  0</div><div class="line"> 1  0      0 128640   6560 1735324    0    0     0    16 2208 2082 11  1 88  0  0</div><div class="line"> 0  0      0 128252   6560 1735692    0    0     0     0 1361 1024  7  1 92  0  0</div><div class="line"> 0  0      0 128244   6560 1735756    0    0     0    16  854  831  2  1 97  0  0</div><div class="line"> 1  0      0 128384   6560 1735828    0    0     0     0 1651 1289  4  1 95  0  0</div><div class="line"> 0  0      0 128260   6560 1735872    0    0     0     0 1178  995  2  1 97  0  0</div><div class="line"> 0  0      0 128260   6568 1735900    0    0     0    20 1086  958  2  0 98  0  0</div></pre></td></tr></table></figure>
+<blockquote>
+<p>第一个参数表示每隔多久采集一次 第二个参数是总共采集次数</p>
+<ul>
+<li><strong>r</strong> 表示运行队列</li>
+<li><strong>b</strong> 表示阻塞的进程</li>
+<li><strong>swpd</strong> 交换分区虚拟内存已使用的大小</li>
+<li><strong>free</strong> 空闲的物理内存的大小</li>
+<li><strong>buff</strong> Linux/Unix系统是用来存储，目录里面有什么内容，权限等的缓存</li>
+<li><strong>cache</strong> cache直接用来记忆我们打开的文件,给文件做缓冲</li>
+<li><strong>si</strong> 每秒从磁盘读入虚拟内存(交换分区)的大小，如果这个值大于0，表示物理内存不够用或者内存泄露了</li>
+<li><strong>so</strong> 每秒虚拟内存写入磁盘的大小(交换分区)，如果这个值大于0，同上。</li>
+<li><strong>bi</strong> 块设备每秒接收的块数量，这里的块设备是指系统上所有的磁盘和其他块设备，默认块大小是1024byte</li>
+<li><strong>bo</strong> 块设备每秒发送的块数量，例如我们读取文件，bo就要大于0。bi和bo一般都要接近0，不然就是IO过于频繁，需要调整。</li>
+<li><strong>in</strong> 每秒CPU的中断次数，包括时间中断</li>
+<li><strong>cs</strong> 每秒上下文切换次数，调用系统函数、线程的切换需要进程上下文切换，这个值要越小越好</li>
+<li><strong>us</strong> 用户CPU时间(用户态)</li>
+<li><strong>sy</strong> 系统CPU时间(系统态)</li>
+<li><strong>id</strong> CPU空闲时间 一般来说，id + us + sy = 100</li>
+<li><strong>wa</strong> 等待IO CPU时间。</li>
+<li><strong>st</strong> 未知</li>
+</ul>
+</blockquote>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://tanwenhai.github.com/2017/11/06/linux-vmstat/" data-id="cj9w6di980008souzgwij0awy" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/11/06/linux-iostat/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          linux iostat
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/11/01/spring-IoC容器的实现/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">spring IoC容器的实现</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring-Cloud-Ribbon/">Spring Cloud Ribbon</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nginx/">nginx</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/php/">php</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/soft/">soft</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Spring-Cloud-Ribbon/" style="font-size: 10px;">Spring Cloud Ribbon</a> <a href="/tags/nginx/" style="font-size: 10px;">nginx</a> <a href="/tags/php/" style="font-size: 20px;">php</a> <a href="/tags/soft/" style="font-size: 10px;">soft</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">十一月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/11/11/docker/">docker</a>
+          </li>
+        
+          <li>
+            <a href="/2017/11/11/jinfo/">jinfo:JAVA进程运行时修改虚拟机参数利器（无需重启）</a>
+          </li>
+        
+          <li>
+            <a href="/2017/11/06/微服务和单体应用对比/">微服务和单体应用对比</a>
+          </li>
+        
+          <li>
+            <a href="/2017/11/06/linux-iostat/">linux iostat</a>
+          </li>
+        
+          <li>
+            <a href="/2017/11/06/linux-vmstat/">linux vmstat</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 tanwenhai<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>
