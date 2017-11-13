@@ -215,8 +215,38 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker run -d -it --name test1 --link mysql:mysql gitlab/gitlab-ce</div></pre></td></tr></table></figure>
 </li>
 <li><p>查看hosts和环境变量</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cat /etc/hosts</div></pre></td></tr></table></figure></li>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cat /etc/hosts</div></pre></td></tr></table></figure>
+</li>
 </ol>
+<h1 id="Dockerfile"><a href="#Dockerfile" class="headerlink" title="Dockerfile"></a>Dockerfile</h1><ol>
+<li><p>基础镜像信息</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 这里注释</span></div><div class="line"><span class="comment"># 第一行必须指定基础镜像可以多个</span></div><div class="line"><span class="keyword">FROM</span> centos </div><div class="line"><span class="comment"># 维护者信息</span></div><div class="line"><span class="keyword">MAINTAINER</span> tanwenhai tanwenhai@outlok.com</div><div class="line"><span class="comment"># 镜像操作指令</span></div><div class="line"><span class="keyword">VOLUME</span><span class="bash"> /tmp</span></div><div class="line"><span class="bash">ADD demo-0.0.1-SNAPSHOT.jar jar</span></div><div class="line"><span class="bash">ENV JAVA_OPTS <span class="string">""</span></span></div><div class="line"><span class="bash">RUN yum -y install mysql</span></div><div class="line"><span class="bash">EXPOSE 8080:8080</span></div><div class="line"><span class="bash"><span class="comment"># 容器启动指令</span></span></div><div class="line"><span class="bash">CMD [<span class="string">"sh"</span>, <span class="string">"-c"</span>, <span class="string">"java <span class="variable">$JAVA_OPTS</span> -jar app.jar"</span>]</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>语法</p>
+</li>
+</ol>
+<ul>
+<li><p><strong>FROM</strong></p>
+<blockquote>
+<p>格式为FROM image或FROM image:tag</p>
+</blockquote>
+</li>
+<li><p><strong>MAINTAINER</strong></p>
+<blockquote>
+<p>MAINTAINER 用户名 邮箱</p>
+</blockquote>
+</li>
+<li><p><strong>RUN</strong></p>
+<blockquote>
+<p>RUN command 或RUN [“EXECUTABLE”, “param1”…] 后者使用exec运行</p>
+</blockquote>
+</li>
+<li><p><strong>CMD</strong> 多个CMD命令只执行最后一个</p>
+<blockquote>
+<p>CMD 或RUN [“EXECUTABLE”, “param1”…] 使用exec运行<br>  CMD command param1 …<br>  CMD [“param1”, …] 提供给ENTERYPOINT的默认参数</p>
+</blockquote>
+</li>
+</ul>
 
     </article>
     <!-- 前后页  -->
@@ -290,7 +320,7 @@
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#容器"><span class="toc-number">1.</span> <span class="toc-text">容器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#运行容器"><span class="toc-number">1.0.1.</span> <span class="toc-text">运行容器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#查看容器"><span class="toc-number">1.0.2.</span> <span class="toc-text">查看容器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#删除容器"><span class="toc-number">1.0.3.</span> <span class="toc-text">删除容器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#连接后台运行中的容器"><span class="toc-number">1.0.4.</span> <span class="toc-text">连接后台运行中的容器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#导出容器"><span class="toc-number">1.0.5.</span> <span class="toc-text">导出容器</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#镜像"><span class="toc-number">2.</span> <span class="toc-text">镜像</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#查找镜像"><span class="toc-number">2.0.1.</span> <span class="toc-text">查找镜像</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#拉取镜像"><span class="toc-number">2.0.2.</span> <span class="toc-text">拉取镜像</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#删除镜像"><span class="toc-number">2.0.3.</span> <span class="toc-text">删除镜像</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#保存镜像"><span class="toc-number">2.0.4.</span> <span class="toc-text">保存镜像</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#导入镜像"><span class="toc-number">2.0.5.</span> <span class="toc-text">导入镜像</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#docker-私有仓库搭建"><span class="toc-number">3.</span> <span class="toc-text">docker 私有仓库搭建</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#容器互联"><span class="toc-number">4.</span> <span class="toc-text">容器互联</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#容器"><span class="toc-number">1.</span> <span class="toc-text">容器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#运行容器"><span class="toc-number">1.0.1.</span> <span class="toc-text">运行容器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#查看容器"><span class="toc-number">1.0.2.</span> <span class="toc-text">查看容器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#删除容器"><span class="toc-number">1.0.3.</span> <span class="toc-text">删除容器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#连接后台运行中的容器"><span class="toc-number">1.0.4.</span> <span class="toc-text">连接后台运行中的容器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#导出容器"><span class="toc-number">1.0.5.</span> <span class="toc-text">导出容器</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#镜像"><span class="toc-number">2.</span> <span class="toc-text">镜像</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#查找镜像"><span class="toc-number">2.0.1.</span> <span class="toc-text">查找镜像</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#拉取镜像"><span class="toc-number">2.0.2.</span> <span class="toc-text">拉取镜像</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#删除镜像"><span class="toc-number">2.0.3.</span> <span class="toc-text">删除镜像</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#保存镜像"><span class="toc-number">2.0.4.</span> <span class="toc-text">保存镜像</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#导入镜像"><span class="toc-number">2.0.5.</span> <span class="toc-text">导入镜像</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#docker-私有仓库搭建"><span class="toc-number">3.</span> <span class="toc-text">docker 私有仓库搭建</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#容器互联"><span class="toc-number">4.</span> <span class="toc-text">容器互联</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Dockerfile"><span class="toc-number">5.</span> <span class="toc-text">Dockerfile</span></a></li></ol>
     </div>
     
     <div class="back-top">&#xe639;</div>
@@ -304,18 +334,6 @@
     <div class="sidebar-content sidebar-content-show-archive">
           <div class="sidebar-archive">
     <!-- 在ejs中将archive按照时间排序 -->
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
     
     
@@ -486,17 +504,17 @@
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">02/14</span><a class="archive-post-title" href= "/2017/02/14/nginx-location指令/" >nginx location指令</a>
-        </li>
-    
-    
-        <li class="archive-post-item">
             <span class="archive-post-date">02/14</span><a class="archive-post-title" href= "/2017/02/14/使用dblib连接sybase/" >使用dblib连接sybase</a>
         </li>
     
     
         <li class="archive-post-item">
             <span class="archive-post-date">02/14</span><a class="archive-post-title" href= "/2017/02/14/数据库软件推荐/" >数据库软件推荐</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/14</span><a class="archive-post-title" href= "/2017/02/14/nginx-location指令/" >nginx location指令</a>
         </li>
     
     
@@ -509,25 +527,25 @@
         <div class="sidebar-tags">
     <div class="sidebar-tags-name">
     
+        <span class="sidebar-tag-name"><a href= "#">spring cloud</a></span>
+    
         <span class="sidebar-tag-name"><a href= "#">Spring Cloud Ribbon</a></span>
     
         <span class="sidebar-tag-name"><a href= "#">php</a></span>
     
-        <span class="sidebar-tag-name"><a href= "#">spring cloud</a></span>
-    
         <span class="sidebar-tag-name"><a href= "#">docker</a></span>
-    
-        <span class="sidebar-tag-name"><a href= "#">linux jinfo</a></span>
-    
-        <span class="sidebar-tag-name"><a href= "#">linux vmstat</a></span>
     
         <span class="sidebar-tag-name"><a href= "#">nginx</a></span>
     
+        <span class="sidebar-tag-name"><a href= "#">linux iostat</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">linux jinfo</a></span>
+    
         <span class="sidebar-tag-name"><a href= "#">spring</a></span>
     
-        <span class="sidebar-tag-name"><a href= "#">soft</a></span>
+        <span class="sidebar-tag-name"><a href= "#">linux vmstat</a></span>
     
-        <span class="sidebar-tag-name"><a href= "#">linux iostat</a></span>
+        <span class="sidebar-tag-name"><a href= "#">soft</a></span>
     
     </div>
     <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
