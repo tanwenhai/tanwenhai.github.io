@@ -8,7 +8,7 @@ signature: xixi
 # SNS
 social:
   email: tanwenhai@outlook.com
-  github: https//github.com/tanwenhai
+  github: //github.com/tanwenhai
   weibo:
   # zhihu:
   # facebook:
@@ -19,9 +19,9 @@ social:
   # others:
   rss: /atom.xml
 # friends
-friends:
-  friendA: //www.baidu.com
-  friendB: //www.google.com
+#friends:
+  # friendA: //www.baidu.com
+  # friendB: //www.google.com
   # friendC :
 about:
   enable: true
