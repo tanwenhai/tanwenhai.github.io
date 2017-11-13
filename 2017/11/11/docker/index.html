@@ -226,27 +226,76 @@
 </li>
 </ol>
 <ul>
-<li><p><strong>FROM</strong></p>
+<li><p><strong>FROM</strong> 指定基础镜像</p>
 <blockquote>
 <p>格式为FROM image或FROM image:tag</p>
 </blockquote>
 </li>
-<li><p><strong>MAINTAINER</strong></p>
+<li><p><strong>MAINTAINER</strong> 维护者信息</p>
 <blockquote>
 <p>MAINTAINER 用户名 邮箱</p>
 </blockquote>
 </li>
-<li><p><strong>RUN</strong></p>
+<li><p><strong>RUN</strong> 镜像操作</p>
+<p>  <em>run指令在build具有缓存</em></p>
 <blockquote>
 <p>RUN command 或RUN [“EXECUTABLE”, “param1”…] 后者使用exec运行</p>
 </blockquote>
 </li>
-<li><p><strong>CMD</strong> 多个CMD命令只执行最后一个</p>
+<li><p><strong>CMD</strong> 启动命令</p>
+<p>  <em>多个CMD命令只执行最后一个</em></p>
 <blockquote>
 <p>CMD 或RUN [“EXECUTABLE”, “param1”…] 使用exec运行<br>  CMD command param1 …<br>  CMD [“param1”, …] 提供给ENTERYPOINT的默认参数</p>
 </blockquote>
 </li>
+<li><strong>EXPOSE</strong> 暴露端口<blockquote>
+<p>EXPOSE port [port/protocol…]</p>
+</blockquote>
+</li>
+<li><p><strong>ENV</strong> 环境变量</p>
+<blockquote>
+<p>ENV key value<br>  ENV key=value …</p>
+</blockquote>
+</li>
+<li><p><strong>ADD</strong> 复制本地目录中的文件到容器中的dest</p>
+<blockquote>
+<p>ADD src dest</p>
+</blockquote>
+</li>
+<li><p><strong>COPY</strong> 和ADD一样 dest不存在是会自动创建目录</p>
+<blockquote>
+<p>COPY src dest</p>
+</blockquote>
+</li>
+<li><p><strong>ENTRYPOINT</strong> 容器启动后执行的命令</p>
+<blockquote>
+<p>ENTRYPOINT [“executable”, “param1”, …] </p>
+</blockquote>
+</li>
+<li><p><strong>volume</strong> 创建数据卷</p>
+<blockquote>
+<p>VOLUME [“/data”]</p>
+</blockquote>
+</li>
+<li><p><strong>USER</strong> 指定容器运行时的用户名或UID</p>
+<blockquote>
+<p>USER username</p>
+</blockquote>
+</li>
+<li><p><strong>WORKDIR</strong> 为后续的RUN、CMD、ENTRYPOINT指定配置工作目录</p>
+<blockquote>
+<p>WORKDIR /APP</p>
+</blockquote>
+</li>
 </ul>
+<ol>
+<li><p>构建镜像 </p>
+<p> <em>-t 指定奖项的标签信息</em></p>
+<blockquote>
+<p>docker build -t centos_test .</p>
+</blockquote>
+</li>
+</ol>
 
     </article>
     <!-- 前后页  -->
@@ -452,6 +501,22 @@
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <div class="total-archive"> Total : 12 </div>
     
     <div class="post-archive">
@@ -509,12 +574,12 @@
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">02/14</span><a class="archive-post-title" href= "/2017/02/14/数据库软件推荐/" >数据库软件推荐</a>
+            <span class="archive-post-date">02/14</span><a class="archive-post-title" href= "/2017/02/14/nginx-location指令/" >nginx location指令</a>
         </li>
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">02/14</span><a class="archive-post-title" href= "/2017/02/14/nginx-location指令/" >nginx location指令</a>
+            <span class="archive-post-date">02/14</span><a class="archive-post-title" href= "/2017/02/14/数据库软件推荐/" >数据库软件推荐</a>
         </li>
     
     
@@ -527,25 +592,25 @@
         <div class="sidebar-tags">
     <div class="sidebar-tags-name">
     
+        <span class="sidebar-tag-name"><a href= "#">php</a></span>
+    
         <span class="sidebar-tag-name"><a href= "#">spring cloud</a></span>
     
         <span class="sidebar-tag-name"><a href= "#">Spring Cloud Ribbon</a></span>
     
-        <span class="sidebar-tag-name"><a href= "#">php</a></span>
-    
-        <span class="sidebar-tag-name"><a href= "#">docker</a></span>
-    
-        <span class="sidebar-tag-name"><a href= "#">nginx</a></span>
+        <span class="sidebar-tag-name"><a href= "#">linux jinfo</a></span>
     
         <span class="sidebar-tag-name"><a href= "#">linux iostat</a></span>
     
-        <span class="sidebar-tag-name"><a href= "#">linux jinfo</a></span>
-    
-        <span class="sidebar-tag-name"><a href= "#">spring</a></span>
+        <span class="sidebar-tag-name"><a href= "#">docker</a></span>
     
         <span class="sidebar-tag-name"><a href= "#">linux vmstat</a></span>
     
+        <span class="sidebar-tag-name"><a href= "#">nginx</a></span>
+    
         <span class="sidebar-tag-name"><a href= "#">soft</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">spring</a></span>
     
     </div>
     <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
