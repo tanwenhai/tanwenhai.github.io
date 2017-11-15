@@ -150,3 +150,29 @@ CMD ["sh", "-c", "java $JAVA_OPTS -jar app.jar"]
     *-t 指定奖项的标签信息*
 
     > docker build -t centos_test .
+
+# NetWork
+1. 创建网络
+```bash
+docker network create test_netework
+```
+2. 查看网络信息
+```bash
+docker network inspect test_network
+```
+3. 删除网络
+```bash
+docker network rm test_network
+```
+4. 容器使用指定网络 *--net*
+```bash
+docker run -itd --net=test_network centos
+```
+5. 连接容器 网络中所有主机除ip访问外，还可以直接用容器名(container-name)作为hostname相互访问
+```bash
+docker network connect test_network mysql
+```
+6. 移除网络
+```bash
+docker network disconnet test_network mysql
+```
