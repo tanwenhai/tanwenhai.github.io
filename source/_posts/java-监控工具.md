@@ -36,4 +36,19 @@ tags:
         jcmd process_id VM.flags [-all]
 
 ## 线程信息
-jconsole和jvisualvm可以实时
+1. jconsole和jvisualvm可以实时显示应用中运行中的线程数量
+
+2. jstack 显示线程的栈信息
+
+        jstack process_id
+        jcmd process_id Thread.print
+
+# 类信息
+1. jconsole或jstat可以提供应用已使用类的个数。jstat还能提供类编译相关的信息
+
+## 实时gc分析
+几乎所有的监控工具都能报告一些gc活动的信息，jconsole可以用实时图显示堆的使用情况，jcmd可以执行gc操作，jmap可以打印堆的概括、永久带信息获取创建堆转储，jstat可以为垃圾收集器正在执行的操作生成许多视图
+
+## 事后堆转储
+jvisualvm的gui界面可以捕获堆转储，也可以用命令行jcmd或jmap生成。堆转储是堆使用情况的快照，可以用不同的工具进行分析，包括jvisualvm和jhat
+
