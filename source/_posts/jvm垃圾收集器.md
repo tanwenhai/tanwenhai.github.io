@@ -13,9 +13,9 @@ tags:
 
 ### GC算法
 jvm提供以下4种不同的垃圾收集算法。
-1. Serial垃圾收集器  
+1. Serial(串行)垃圾收集器  
 Serial垃圾收集器是四种垃圾收集器中最简单的一种。Serial使用单线程清理堆内容，无论是进行Minor GC还是Full GC，清理堆空间时，所有的应用线程都会被暂停。进行Full GC时，他还会对老年代空间的对象进行压缩整理。通过-XX:+UseSerialGC标志可以启用Serial收集器
-2. Throughput垃圾收集器  
+2. Throughput(吞吐量)垃圾收集器  
 Throughput收集器是Server级虚拟机的默认收集器。Throughput收集器使用多线程回收新生代空间，Minor GC的速度比使用Serial收集器快得多。处理老年代时Throughput收集器也能使用多线程方式。由于Thoughput收集器使用多线程也常常被称为Paraller收集器。Thoughput收集器在Minor GC和Full GC时会暂停所有的应用线程，同时在Full GC过程中会对老年代空间进行压缩整理。
 3. CMS收集器  
 CMS收集器在Full GC时不再暂停应用线程，而是使用肉若干个后台线程定期对老年嗲空间进行扫描，及时回收其中不再使用的对象。这种算法帮助CMS成为一个低延迟的收集器：应用线程只在Minor GC以及后台线程扫描老年代时发生极其短暂的停顿。应用程序线程停顿的总时长与使用Throughput收集器比起来短得多  
