@@ -147,7 +147,7 @@ CMD ["sh", "-c", "java $JAVA_OPTS -jar app.jar"]
     > WORKDIR /APP
 3. 构建镜像 
 
-    *-t 指定奖项的标签信息*
+    *-t 指定奖项的标签信息* 用&&连接命令可以减少镜像大小
 
     > docker build -t centos_test .
 
