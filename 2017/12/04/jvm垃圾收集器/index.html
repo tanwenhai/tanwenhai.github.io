@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" >
+    <title>
+        
+        jvm垃圾收集器 · xixi
+        
+    </title>
+    <link rel="icon" href= /assests/favicon.ico>
+    <!-- TODO: 在font-face加载完毕后改变字体  -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/webfont/1.6.28/webfontloader.js"></script>
+    <!-- 提前加载place holder  -->
+    <style type="text/css">
+        @font-face {
+            font-family: 'Oswald-Regular';
+            src: url(/font/Oswald-Regular.ttf);
+        }
+    </style>
+    <style type="text/css">
+        .site-intro-placeholder {
+            position: absolute;
+            z-index: -2;
+            top: 0;
+            left: 0px;
+            width: calc(100% + 300px);
+            height: 100%;
+            background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+            background-position: center center;
+            transform: translate3d(-226px, 0, 0);
+            animation: gradient-move 2.5s ease-out 0s 1;
+        }
+        @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+</style>
+    <link rel="stylesheet" href = /css/style.css?v=20171020 />
+    <script src="//cdn.staticfile.org/jquery/3.2.1/jquery.min.js" defer></script>
+    
+    <script src="/scripts/main.js" defer></script>
+    <!-- 百度统计  -->
+    
+    <!-- 谷歌统计  -->
+    
+</head>
+    
+        <body class="post-body">
+    
+    
+<header class="header">
+
+    <div class="header-sidebar-menu">&#xe775;</div>
+    <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/" >xixi</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">jvm垃圾收集器</a>
+            </div>
+    </div>
+    
+    <a class="home-link" href=/>xixi</a>
+</header>
+    <div class="wrapper">
+        <div class="site-intro">
+    
+    <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
+            
+    <div class="site-intro-img" style="background-image: url(http://oumn0o088.bkt.clouddn.com/post-bg.jpg)"></div>
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+            jvm垃圾收集器
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+            
+            <!-- 404 -->
+            
+        </p>
+        <!-- 文章页meta -->
+        
+            <!-- 文章页标签  -->
+            
+            <div class="post-intro-meta">
+                <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                <span class="post-intro-time">2017/12/04</span>
+            </div>
+        
+    </div>
+</div>
+        <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
+        <script>
+            var browser = {
+                    versions: function () {
+                        var u = window.navigator.userAgent;
+                        return {
+                            userAgent: u,
+                            trident: u.indexOf('Trident') > -1, //IE内核
+                            presto: u.indexOf('Presto') > -1, //opera内核
+                            webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+                            gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+                            mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+                            ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+                            android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+                            iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+                            iPad: u.indexOf('iPad') > -1, //是否为iPad
+                            webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+                            weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+                            uc: u.indexOf('UCBrowser') > -1 //是否为android下的UC浏览器
+                        };
+                    }()
+                }
+
+            function fontLoaded(){
+                console.log('font loaded');
+                if (document.getElementsByClassName('site-intro-meta')) {
+                    document.getElementsByClassName('intro-title')[0].classList.add('intro-fade-in');
+                    document.getElementsByClassName('intro-subtitle')[0].classList.add('intro-fade-in');
+                    var postIntroTags = document.getElementsByClassName('post-intro-tags')[0],
+                        postIntroMeat = document.getElementsByClassName('post-intro-meta')[0];
+                        if (postIntroTags) {
+                            postIntroTags.classList.add('post-fade-in');
+                        }
+                        if (postIntroMeat) {
+                            postIntroMeat.classList.add('post-fade-in');
+                        }
+                    }
+                }
+                
+            console.log("userAgent:" + browser.versions.userAgent);
+            // UC不支持跨域，所以直接显示
+            if (browser.versions.uc) {
+                console.log("UCBrowser");
+                fontLoaded();
+            } else {
+                WebFont.load({
+                    custom: {
+                        families: ['Oswald-Regular']
+                    },
+                    loading: function () {  //所有字体开始加载
+                        // console.log('loading');
+                    },
+                    active: function () {  //所有字体已渲染
+                        fontLoaded();
+                    },
+                    inactive: function () { //字体预加载失败，无效字体或浏览器不支持加载
+                        console.log('inactive: timeout');
+                        fontLoaded();
+                    },
+                    timeout: 7000 // Set the timeout to two seconds
+                });
+            }
+        </script>
+        <div class="container container-unloaded">
+            <main class="main post-page">
+    <article class="article-entry">
+        <h1 id="垃圾收集概述"><a href="#垃圾收集概述" class="headerlink" title="垃圾收集概述"></a>垃圾收集概述</h1><p>垃圾收集由两步构成：查找不再使用的对象，释放这些对象所管理的内存。jvm从查找不再使用的对象入手。jvm通过定期扫描来查找不再使用的对象。一旦发现垃圾对象，jvm会回收这些对象所持有的内存，把他们分配给需要内存的其他对象。</p>
+<h2 id="分代垃圾收集器"><a href="#分代垃圾收集器" class="headerlink" title="分代垃圾收集器"></a>分代垃圾收集器</h2><p>虽然实现的细节千差万别，但所有的垃圾收集器都遵循了同一个方式，即根据情况将堆划分成不同的代。这些代被称为老年代和新生代。新生代又被进一步划分为不同的区段，分别称为Eden空间和Survivor空间，采用分代机制的原因是很多对象的生产时间非常短。<br>新生代是堆的一部分，对象首先在新生代中分配。新生代填满时，垃圾收集器会暂停所有的应用线程，回收新生代空间。不再使用的对象会被回收，仍在使用的对象会被移动到其他地方。这种操作被称为Minor GC。<br>对象不断的移动到老年代，最终老年代也会被填满，jvm需要找出老年代中不再使用的对象，并对它们进行回收，简单的垃圾收集算法直接停掉所有的应用线程，找出不再使用的对象，对其进行回收，接着对堆空间进行整理。这个过程被称为Full GC。</p>
+<h3 id="GC算法"><a href="#GC算法" class="headerlink" title="GC算法"></a>GC算法</h3><p>jvm提供以下4种不同的垃圾收集算法。</p>
+<ol>
+<li>Serial(串行)垃圾收集器<br>Serial垃圾收集器是四种垃圾收集器中最简单的一种。Serial使用单线程清理堆内容，无论是进行Minor GC还是Full GC，清理堆空间时，所有的应用线程都会被暂停。进行Full GC时，他还会对老年代空间的对象进行压缩整理。通过-XX:+UseSerialGC标志可以启用Serial收集器</li>
+<li>Throughput(吞吐量)垃圾收集器<br>Throughput收集器是Server级虚拟机的默认收集器。Throughput收集器使用多线程回收新生代空间，Minor GC的速度比使用Serial收集器快得多。处理老年代时Throughput收集器也能使用多线程方式。由于Thoughput收集器使用多线程也常常被称为Paraller收集器。Thoughput收集器在Minor GC和Full GC时会暂停所有的应用线程，同时在Full GC过程中会对老年代空间进行压缩整理。</li>
+<li>CMS收集器<br>CMS收集器在Full GC时不再暂停应用线程，而是使用肉若干个后台线程定期对老年嗲空间进行扫描，及时回收其中不再使用的对象。这种算法帮助CMS成为一个低延迟的收集器：应用线程只在Minor GC以及后台线程扫描老年代时发生极其短暂的停顿。应用程序线程停顿的总时长与使用Throughput收集器比起来短得多<br>额外付出的代价时更高的CPU使用：必须有足够的CPU资源用于运行后台的垃圾收集线程，在应用程序线程运行的同时扫描堆的使用情况。除此之外，后台线程不再进行任何压缩整理的工作，这意味着堆会逐渐变得碎片化。如果CMS的后台线程无法获得完成他们任务所需的CPU资源，或者如果堆变得过度碎片化以至于无法找到连续空间分配对象，CMS就蜕化到Serial收集器的行为：暂停所有应用线程，使用单线程回收、整理老年代空间，这之后又恢复到并发运行，再次启动后台线程。<br>通过-XX:UseConvMarkSweepGC、-XXUseParNewGC标志启用CMS垃圾收集器。</li>
+<li>G1垃圾收集器<br>G1垃圾收集算法将堆划分为若干个区域，不过它依旧属于分代收集器。这些区域中的一部分包含新生代，新生代的垃圾收集仍然使用采用暂停所有应用线程的方式，将存活对象移动到老年代或者Survivor空间。同其他的收集算法一样，这些操作也利用多线程的方式完成。<br>G1收集器属于Concurrent收集器：老年代的垃圾收集工作由后台线程完成，大多数的工作不需要暂停应用线程。由于老年代被划分到不同的区域，G1收集器通过将对象从一个区域复制到另一个区域，完成对象的清理工作，这也意味着在正常的处理过程中，G1收集器实现了堆的压缩整理。因此，使用G1收集器的堆不太容易发碎片化。通过标志-XX:UseG1GC启用G1垃圾收集器。</li>
+</ol>
+<h2 id="GC调优"><a href="#GC调优" class="headerlink" title="GC调优"></a>GC调优</h2><p>虽然处理堆时各种GC算法有所差异，但是他们的基本配置参数时一致的。</p>
+<h3 id="调整堆的大小"><a href="#调整堆的大小" class="headerlink" title="调整堆的大小"></a>调整堆的大小</h3><p>与其他的性能问题一样，选择堆的大小其实时一种平衡。如果分配的堆过于小，程序大部分时间可能都消耗在GC上，没有足够的时间去运行应用程序的逻辑。但是，简单粗暴地设置一个特别大的堆也不是解决问题的办法。GC停顿消耗的时间取决于堆的大小，如果增大堆的空间，停顿的持续时间也会变长。这种情况下，停顿的频率会变得更少，但是它们持续的时间会让程序的整体性能变慢。<br>调整堆大小时首要的原则就是永远不要将堆的容量设置得比机器的物理内存还打，除此之外，还需要为jvm自身一级机器上其他应用程序预留一部分的内存空间<br>堆的大小由2个参数值空之：分别是初始值(-Xms)和最大值(-Xmx)，可以将堆的初始值和最大值直接设置为一样的数值。这种设置能稍微提高GC的运行效率，因为它不再需要估算堆是否需要调整大小了。</p>
+<h3 id="代空间的调整"><a href="#代空间的调整" class="headerlink" title="代空间的调整"></a>代空间的调整</h3><p>一旦堆的大小确定下来，jvm就需要决定分配多少堆给新生代空间，多少给老年代空间。如果新生代分配得比较大，垃圾收集发生的频率就比较低，从新生代晋升到老年代的对象也更少，老年代相对比较小，比较容易被填满，会更频繁地触发Full GC。<br>不同的GC算法尝试使用不同的方法来解决这些平衡问题。虽然方法不同，不过所有的GC方法都使用了同一套标志来设置代的大小<br>所有用于调整代空间的命令行标志调整的都是新生代空间，新生代空间剩下的所有空间都被老年代占用</p>
+<blockquote>
+<p>-XX:NewRatio=N 设置新生代与老年代的空间占用比率。<strong>初始新生代大小 = 初始堆大小 / (1 + NewRatio)</strong></p>
+<p>-XX:NewSize=N 设置新生代空间的初始大小</p>
+<p>-XX:MaxNewSize=N 设置新生代空间的最大大小</p>
+<p>-XmnN 将NewSize和MaxNewSize设定为同一个值的快捷方法</p>
+</blockquote>
+<h3 id="永久代和元空间的调整"><a href="#永久代和元空间的调整" class="headerlink" title="永久代和元空间的调整"></a>永久代和元空间的调整</h3><p>jvm载入类的时候，需要记录这些类的元数据。这部分数据被保存在一个单独的堆空间中。在Java 8称为元空间(Metaspace)，Java 8之前称为永久代<br>永久代和元空间并不完全一样。永久代保存了一些与数据无关的杂项对象，这些对象在Java 8中移到了普通的堆空间内。除此之外，Java 8从根本上改变了保存在这个特殊区域内的元数据类型。使用元空间替换掉永久代的优势之一时不再需要对其进行调整</p>
+<h3 id="控制并发"><a href="#控制并发" class="headerlink" title="控制并发"></a>控制并发</h3><p>除Serial收集器之外几乎所有的垃圾收集器使用的算法都基于多线程。启动的线程数由-XX:ParallelGCThreads=N参数控制<br>几乎所有的垃圾收集算法中基本的垃圾回收线程数都依据机器上的CPU数目计算得出，多个jvm运行于同一台物理机上时，计算得出的线程数可能过高，需进行优化</p>
+<h3 id="垃圾回收工具"><a href="#垃圾回收工具" class="headerlink" title="垃圾回收工具"></a>垃圾回收工具</h3><p>多开启GC日志，使用-verbose:gc或-XX:+PrintGC这两个标志中的任意一个能创建基本的GC日志。使用-XX:+PringGCDetails标志会创建更详细的GC日志，使用-XX:+PrintGCTimeStamps或-XX:PrintGCDateStamps，便于更精确地判断GC操作之间的时间，使用-Xloggc:filename标志修改输出到某个文件，使用日志循环标志可以限制保存在GC日志中的数据量。通过-XX:+UseGCLogfileRotaion -XX:NumberOfGCLogFiles=N -XX:GCLogfilesSize=N标志控制日志文件的循环<br><a href="https://github.com/jewes/gchisto" target="_blank" rel="external">GC Histogram</a>能够读入GC日志，根据日志文件中的数据生成对应的图表和表格。<br>使用jconsole可以实时监控堆的使用情况<br>使用jstat监控应用程序的垃圾回收过程<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">$ jstat -gcutil 28833 1000</div><div class="line">  S0     S1     E      O      M     CCS    YGC     YGCT    FGC    FGCT     GCT   </div><div class="line"> 66.63   0.00  65.51  46.64  94.45  91.38    330   27.059    12    0.859   27.918</div><div class="line"> 66.63   0.00  65.60  46.64  94.45  91.38    330   27.059    12    0.859   27.918</div><div class="line"> 66.63   0.00  65.60  46.64  94.45  91.38    330   27.059    12    0.859   27.918</div><div class="line"> 66.63   0.00  65.60  46.64  94.45  91.38    330   27.059    12    0.859   27.918</div><div class="line"> 66.63   0.00  65.63  46.64  94.45  91.38    330   27.059    12    0.859   27.918</div></pre></td></tr></table></figure></p>
+
+    </article>
+    <!-- 前后页  -->
+    <ul class="post-pager">
+        
+            <li class="next">
+                <a href= "/2017/12/07/Java-EE性能调优/" title= Java EE性能调优 >
+                    <span>Next Post</span>
+                    <span>Java EE性能调优</span>
+                </a>
+            </li>
+        
+        
+            <li class="previous">
+                <a href= "/2017/12/04/jit编译器/" title= jit编译器 >
+                    <span>Previous Post</span>
+                    <span>jit编译器</span>
+                </a>
+            </li>
+        
+    </ul>
+    <!-- 评论插件 -->
+    <!-- 来必力City版安装代码 -->
+
+<!-- City版安装代码已完成 -->
+    
+    
+    <!--PC版-->
+
+    <!--PC版-->
+
+
+    
+</main>
+            <!-- profile -->
+            
+        </div>
+        <footer class="footer footer-unloaded">
+    <!-- social  -->
+    
+    <div class="social">
+        
+    
+        
+            
+                <a href="mailto:tanwenhai@outlook.com" class="iconfont-archer email" title=email ></a>
+            
+        
+    
+        
+            
+                <a href="//github.com/tanwenhai" class="iconfont-archer github" target="_blank" title="github"></a>
+            
+        
+    
+        
+    
+        
+            
+                <a href="/atom.xml" class="iconfont-archer rss" target="_blank" title="rss"></a>
+            
+        
+    
+
+    </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">Theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">archer</a></span>
+    </div>
+    <!-- 不蒜子  -->
+    
+</footer>
+    </div>
+    <!-- toc -->
+    
+    <div class="toc-wrapper">
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#垃圾收集概述"><span class="toc-number">1.</span> <span class="toc-text">垃圾收集概述</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#分代垃圾收集器"><span class="toc-number">1.1.</span> <span class="toc-text">分代垃圾收集器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#GC算法"><span class="toc-number">1.1.1.</span> <span class="toc-text">GC算法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#GC调优"><span class="toc-number">1.2.</span> <span class="toc-text">GC调优</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#调整堆的大小"><span class="toc-number">1.2.1.</span> <span class="toc-text">调整堆的大小</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#代空间的调整"><span class="toc-number">1.2.2.</span> <span class="toc-text">代空间的调整</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#永久代和元空间的调整"><span class="toc-number">1.2.3.</span> <span class="toc-text">永久代和元空间的调整</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#控制并发"><span class="toc-number">1.2.4.</span> <span class="toc-text">控制并发</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#垃圾回收工具"><span class="toc-number">1.2.5.</span> <span class="toc-text">垃圾回收工具</span></a></li></ol></li></ol></li></ol>
+    </div>
+    
+    <div class="back-top">&#xe639;</div>
+    <div class="sidebar">
+    <div class="sidebar-header sidebar-header-show-archive">
+        <div class="sidebar-category">
+            <span class="sidebar-archive-link"><span class="iconfont-archer">&#xe67d;</span>Archive</span>
+            <span class="sidebar-tags-link"><span class="iconfont-archer">&#xe610;</span>Tag</span>
+        </div>
+    </div>
+    <div class="sidebar-content sidebar-content-show-archive">
+          <div class="sidebar-archive">
+    <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-archive"> Total : 21 </div>
+    
+    <div class="post-archive">
+    
+    
+    
+    
+    <div class="archive-year"> 2017 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/21</span><a class="archive-post-title" href= "/2017/12/21/mysql-explain/" >mysql explain</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/18</span><a class="archive-post-title" href= "/2017/12/18/设计模式概述/" >设计模式概述</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/13</span><a class="archive-post-title" href= "/2017/12/13/Mysql数据库ACID和隔离级别/" >数据库ACID和隔离级别</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/08</span><a class="archive-post-title" href= "/2017/12/08/Java-SE性能调优/" >Java SE API技巧</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/07</span><a class="archive-post-title" href= "/2017/12/07/Java-EE性能调优/" >Java EE性能调优</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/04</span><a class="archive-post-title" href= "/2017/12/04/jvm垃圾收集器/" >jvm垃圾收集器</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/04</span><a class="archive-post-title" href= "/2017/12/04/jit编译器/" >jit编译器</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/02</span><a class="archive-post-title" href= "/2017/12/02/java-监控工具/" >java 监控工具</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/25</span><a class="archive-post-title" href= "/2017/11/25/spring-cloud/" >spring cloud</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/11</span><a class="archive-post-title" href= "/2017/11/11/docker/" >docker</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/11</span><a class="archive-post-title" href= "/2017/11/11/jinfo/" >jinfo:JAVA进程运行时修改虚拟机参数利器（无需重启）</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/06</span><a class="archive-post-title" href= "/2017/11/06/微服务和单体应用对比/" >微服务和单体应用对比</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/06</span><a class="archive-post-title" href= "/2017/11/06/linux-iostat/" >linux iostat</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/06</span><a class="archive-post-title" href= "/2017/11/06/linux-vmstat/" >linux vmstat</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/01</span><a class="archive-post-title" href= "/2017/11/01/spring-IoC容器的实现/" >spring IoC容器的实现</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/02</span><a class="archive-post-title" href= "/2017/10/02/Hystrix/" >Hystrix</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/30</span><a class="archive-post-title" href= "/2017/09/30/Ribbon/" >Ribbon</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/14</span><a class="archive-post-title" href= "/2017/02/14/数据库软件推荐/" >数据库软件推荐</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/14</span><a class="archive-post-title" href= "/2017/02/14/使用dblib连接sybase/" >使用dblib连接sybase</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/14</span><a class="archive-post-title" href= "/2017/02/14/nginx-location指令/" >nginx location指令</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/14</span><a class="archive-post-title" href= "/2017/02/14/10-件在-PHP-7-中不要做的事情/" >10 件在 PHP 7 中不要做的事情</a>
+        </li>
+    
+    </div>
+  </div>
+        <div class="sidebar-tags">
+    <div class="sidebar-tags-name">
+    
+        <span class="sidebar-tag-name"><a href= "#">JavaEE</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">spring cloud</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">mysql, database</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Java</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Spring Cloud Ribbon</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">php</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">docker</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">linux jinfo</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">java jit</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">mysql</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">nginx</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">linux vmstat</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">linux iostat</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">soft</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">spring</a></span>
+    
+    </div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+    缺失模块。<br/>
+    1、请确保node版本大于6.2<br/>
+    2、在博客根目录（注意不是archer根目录）执行以下命令：<br/>
+    <span style="color: #f75357; font-size: 1rem; line-height: 2rem;">npm i hexo-generator-json-content --save</span><br/>
+    3、在根目录_config.yml里添加配置：
+    <pre style="color: #888; font-size: 0.6rem;">
+jsonContent:
+  meta: false
+  pages: false
+  posts:
+    title: true
+    date: true
+    path: true
+    text: false
+    raw: false
+    content: false
+    slug: false
+    updated: false
+    comments: false
+    link: false
+    permalink: false
+    excerpt: false
+    categories: false
+    tags: true</pre>
+    </div> 
+    <div class="sidebar-tag-list"></div>
+</div>
+    </div>
+</div> 
+    <script>
+    var jsInfo = {
+        root: '/'
+    }
+</script>
+    <!-- 不蒜子  -->
+    
+    <!-- CNZZ统计  -->
+    
+    </div>
+    </body>
+</html>
+
+
