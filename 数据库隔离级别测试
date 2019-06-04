@@ -103,3 +103,83 @@ COMMIT;
 
 
 # PostgreSQL
+### 读已提交
+BEGIN;
+SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+
+INSERT INTO "public"."test1" VALUES(1,'2');
+SELECT * FROM "test1";
+SELECT pg_sleep(5);
+UPDATE "public"."test1" SET "test"='123' WHERE "id" = 1;
+SELECT pg_sleep(5);
+SELECT * FROM "public"."test1";
+COMMIT;
+
+-- ROLLBACK
+
+SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+BEGIN;
+SELECT * FROM test1;
+
+INSERT INTO test1 VALUES(2,'3');
+-- SELECT pg_sleep(10);
+-- UPDATE test1 SET test='456' WHERE id = 1;
+SELECT * FROM test1;
+
+COMMIT;
+
+-- ROLLBACK
+
+### 重复读
+BEGIN;
+SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;
+
+INSERT INTO "public"."test1" VALUES(1,'2');
+SELECT * FROM "test1";
+SELECT pg_sleep(5);
+UPDATE "public"."test1" SET "test"='123' WHERE "id" = 1;
+SELECT pg_sleep(5);
+SELECT * FROM "public"."test1";
+COMMIT;
+
+-- ROLLBACK
+
+SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;
+BEGIN;
+SELECT * FROM test1;
+
+INSERT INTO test1 VALUES(2,'3');
+SELECT pg_sleep(5);
+UPDATE test1 SET test='456' WHERE id = 1;
+SELECT * FROM test1;
+
+COMMIT;
+
+-- ROLLBACK
+
+### 串行化
+BEGIN;
+SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
+
+INSERT INTO "public"."test1" VALUES(1,'2');
+SELECT * FROM "test1";
+SELECT pg_sleep(5);
+UPDATE "public"."test1" SET "test"='123' WHERE "id" = 1;
+SELECT pg_sleep(5);
+SELECT * FROM "public"."test1";
+COMMIT;
+
+-- ROLLBACK
+
+SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
+BEGIN;
+SELECT * FROM test1;
+
+INSERT INTO test1 VALUES(2,'3');
+SELECT pg_sleep(5);
+UPDATE test1 SET test='456' WHERE id = 1;
+SELECT * FROM test1;
+
+COMMIT;
+
+-- ROLLBACK
